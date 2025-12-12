@@ -1,5 +1,11 @@
 ﻿# **CLASIFICADOR DE FAKE-NEWS ACERCA DEL COVID-19**
 
+ Alumnos:
+   Marta Pascual (100472750)
+   Mario Bello (100569405)
+   Miguel Bielsa (100567913)
+   María Sancho (100575557)
+
 ## **1.-Descripción del problema**
 
 Durante la pandemia de COVID-19, la propagación del virus vino acompañada de una enorme cantidad de noticias que se difundían en cuestión de minutos por todo el mundo. Noticias falsas sobre curas milagrosas, efectos secundarios de las candidatas a vacunas que se inventaban o teorías conspirativas acerca de la falsedad de la enfermedad circularon ampliamente, afectando a la percepción pública y mezclando información valiosa con bulos que circulaban por la red.
@@ -318,6 +324,7 @@ Por otro lado, los modelos más complejos, como la red neuronal y el fine-tuning
 Como trabajo futuro, sería interesante extender el estudio a una clasificación multiclase, reincorporando la etiqueta partially false, así como evaluar la generalización de los modelos en otros conjuntos de datos y dominios temáticos. Esto permitiría validar la robustez de los enfoques propuestos frente a distintos tipos de desinformación.
 
 Adicionalmente, podrían explorarse arquitecturas neuronales más específicas para embeddings contextuales, técnicas de regularización más avanzadas y métodos de explicabilidad que faciliten la interpretación de las decisiones del modelo. La incorporación de información adicional, como metadatos o fuentes de las noticias, constituye también una línea prometedora para mejorar el rendimiento en aplicaciones reales.
+
 
 
 
