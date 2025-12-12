@@ -8,14 +8,17 @@ En este proyecto se han desarrollado diferentes modelos de clasificación autom�
 
 ## **2.-Conjunto de datos**
 
-Para abordar el problema, hemos contado con una base de datos con noticias recopiladas de diferentes fuentes y etiquetadas como 1-True o 0-False/Partially False. Concretamente, hay un total de 3119 noticias, repartidas entre 2061 verdaderas y 1058 falsas, de las que no solo se muestra la noticia y la etiqueta, sino también el título y la categoría (True/False/Partially False). 
+Para abordar el problema, hemos contado con una base de datos con noticias recopiladas de diferentes fuentes y etiquetadas como 1-True o 0-False/Partially False. Concretamente, hay un total de 3119 noticias, repartidas entre 2061 verdaderas y 1058 falsas (como muestra el histograma a continuación), de las que no solo se muestra la noticia y la etiqueta, sino también el título y la categoría (True/False/Partially False). 
+
+<img width="790" height="490" alt="image" src="https://github.com/user-attachments/assets/f19ed717-adc3-4503-b334-b4a20e5a54a9" />
 
 En cuanto a esta subdivisión de las noticias falsas entre False y Partially False, dado que el número de noticias verdaderas es casi el doble, hemos podido comprobar que provoca una degradación en las prestaciones de algunos de los algoritmos de clasificación al intentar clasificar entre 3 etiquetas diferentes. Es por ello que se ha simplificado el problema a un clasificador binario de noticias true/false sobre el Covid-19 eliminando la categoría de Partially False.
 
-En cuanto a la longitud de las noticias
+Las noticias de nuestro dataset tienen de media unos 2250 caracteres y 365 palabras, es decir, que son noticias bastante largas. En el histograma de la siguiente figura se muestra la distribución del número de caracteres y palabras y la frecuencia con la que aparecen en las noticias. Encontramos noticias de hasta 5500 palabras y 32000 caracteres, luego para futuras secciones, aunque se reducirá considerablemente el vocabulario empleado, nos quedaremos con unas 8000 palabras. Es algo más de lo habitual, pero el objetivo es no perder información en nuestras noticias tan grandes.
 
 <img width="1624" height="573" alt="image" src="https://github.com/user-attachments/assets/e0ed4707-3508-4b86-95c3-74e5e58e23ca" />
 
+Como hipótesis y resultados que podríamos esperar, podemos decir que, al haber casi el doble de noticias verdaderas que de noticias falsas, es probable que sea para la clase maypritaria (verdaderas) para la que cometamos menos errores al clasificar las noticias. Además, no hemos podido identificar en el primer cuaderno (de análisis de la base de datos) ninguna palabra característica o patrón importante que diferencie con claridad las noticias verdaderas y falsas.
 
 Como trabajo previo a la presentación de las técnicas de vectorización y algoritmos clasificadores, se ha realizado una limpieza y homogeneización de este conjunto de noticias para evitar que caracteres, urls y palabras concretas (como cambiar *viru* por *virus*) entren a nuestros modelos e introduzcan ruido que dificulte el trabajo de clasificación.
 
@@ -41,9 +44,11 @@ Además, se ha dividido la base de datos en 3 conjuntos de *train*,*test* y *val
 
 - Supporrt Vector Machine (SVM): Es un modelo de aprendizaje supervisado que busca un límite óptimo que separe las clases con el mayor margen posible (en este caso nuestras noticias *true*/*false*). Se ha escogido por ser un modelo bastante diferente del de Regresión Logística y, en principio, más complejos. En el siguiente apartado se ofrecen los resultados obtenidos en comparación con Regresión Logística.
   
-- Red Neuronal: En este caso se ha diseñado un modelo compuesto por capas de nodos (neuronas)
+- Red Neuronal: En este caso se ha diseñado un modelo supervisado compuesto por capas de nodos (neuronas) para clasificar noticias sobre COVID-19 como verdaderas o falsas usando vectores TF-IDF, Word2Vec y Embeddings Contextuales (RoBERTa).
+  Hemos implementado una arquitectura con tres capas ocultas (de 1024, 512 y 128 neuronas), con ReLU, Batch Normalization, Dropout progresivo para prevenir sobreajuste y una capa de salida con sigmoide para clasificación binaria. Dado que es binaria, se ha establecido la red con una única salida para reducir la complejidad de la misma, pues es suficiente para deducir si la noticia es verdadera (salida=1) o falsa (salida=0).
+  Para el entrenamiento, hemos utilizado un optimizador Adam y BCEWithLogitsLoss como función de pérdidas, que combina sigmoide + Binary Cross Entropy. Los datos se procesan en mini-batches con validación para controlar el rendimiento y se han ido ajustando los parámetros de learning rate, número de neuronas de las capas ocultas, dropout, weight decay, etc. hasta obtener los resultados que se presentan en la siguiente sección.
   
-- RoBERTa+Fine-Tunning: Partiendo del modelo preentrenado de Hugging face de RoBERTa
+- RoBERTa+Fine-Tunning: Se ha realizado fine-tunning al modelo preentrenado de RoBERTa. El fine-tuning consiste en ajustar un modelo preentrenado a una tarea específica usando tus propios datos. En nuestro caso, hemos entrenado RoBERTa con noticias sobre COVID-19 para que aprenda a clasificar automáticamente noticias verdaderas y falsas, combinando su conocimiento general del lenguaje con los patrones específicos de nuestro dataset. Los resultados han sido positivos y, nuevamente, se presentan y comparan en la siguiente sección.
 
 ## **4.-Resultados experimentales**
 
