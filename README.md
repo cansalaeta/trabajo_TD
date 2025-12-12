@@ -129,7 +129,7 @@ Como se aprecia en los valores mostrados, ambos clasificadores presentan comport
 
 En este apartado se analizan los resultados obtenidos con la red neuronal implementada en PyTorch, aplicada a las distintas representaciones vectoriales consideradas: TF-IDF, Word2Vec y embeddings contextuales basados en RoBERTa. Para cada caso se presentan las métricas obtenidas en el conjunto de test, así como el comportamiento observado durante el entrenamiento a partir de las curvas de pérdida y precisión.
 
-#### **4.6.1. Red Neuronal con TF-IDF**
+#### **4.6.1. hazTF-IDF**
 
 | Métrica (Test)    | Valor  |
 | ----------------- | ------ |
@@ -144,7 +144,16 @@ Sin embargo, si nos fih¡jamos en las curvas de entrenamiento y validación, el 
 
 <img width="1087" height="443" alt="image" src="https://github.com/user-attachments/assets/7653859c-6620-4f3e-a107-d831dbbc0106" />
 
-#### **4.6.1. Red Neuronal con TF-IDF**
+Si nos fijamos en la matriz de confusión recogida en la siguiente tabla:
+
+| Real \ Predicha | 0 (False) | 1 (True) |
+|-----------------|-----------|----------|
+| 0 (False)       | 129       | 83       |
+| 1 (True)        | 45        | 367      |
+
+Vemos que TF-IDF muestra un mayor número de falsos positivos, es decir, noticias falsas clasificadas como verdaderas. Este desequilibrio indica que el modelo tiende a favorecer la clase mayoritaria, lo que reduce la precisión en la detección de noticias falsas. Por este motivo, métricas como el F1-score resultan especialmente relevantes para evaluar el rendimiento real del clasificador en este escenario.
+
+#### **4.6.1. Word2Vec**
 
 | Métrica (Test)    | Valor  |
 | ----------------- | ------ |
@@ -159,7 +168,16 @@ Además, las curvas de pérdida y precisión muestran un comportamiento más est
 
 <img width="1083" height="441" alt="image" src="https://github.com/user-attachments/assets/07a5a889-5665-4f1d-8b0b-cb769bbac5e5" />
 
-#### **4.6.3. Red Neuronal con RoBERTa**
+Si nos fijamos en la matriz de confusión recogida en la siguiente tabla:
+
+| Real \ Predicha | 0 (False) | 1 (True) |
+|-----------------|-----------|----------|
+| 0 (False)       | 151       | 61       |
+| 1 (True)        | 70        | 342      |
+
+Para Word2Vec, los errores de clasificación se encuentran más equilibrados entre falsos positivos y falsos negativos, lo que indica un comportamiento más homogéneo entre ambas clases. La capacidad de Word2Vec para capturar relaciones semánticas entre palabras parece contribuir a esta mejora, reduciendo el sesgo observado en TF-IDF y proporcionando una ligera ventaja en términos de estabilidad del modelo.
+
+#### **4.6.3. RoBERTa**
 
 | Métrica (Test)    | Valor  |
 | ----------------- | ------ |
@@ -173,6 +191,15 @@ Como vemos en la tabla en el caso de RoBERTa, la red neuronal alcanza un rendimi
 Las curvas de entrenamiento muestran nuevamente una clara separación entre las métricas de entrenamiento y validación, lo que indica que la complejidad de los embeddings contextuales no se traduce directamente en una mejora del rendimiento cuando se utilizan arquitecturas densas estándar. Este resultado sugiere que los embeddings de RoBERTa requieren modelos más especializados o procesos de fine-tuning para explotar plenamente su potencial.
 
 <img width="1120" height="443" alt="image" src="https://github.com/user-attachments/assets/d7a67db4-aea0-4951-bcb5-e3ac8c89d6bb" />
+
+Si nos fijamos en la matriz de confusión recogida en la siguiente tabla:
+
+| Real \ Predicha | 0 (False) | 1 (True) |
+|-----------------|-----------|----------|
+| 0 (False)       | 148       | 64       |
+| 1 (True)        | 69        | 343      |
+
+En el caso de RoBERTa, la matriz de confusión refleja un comportamiento similar al de Word2Vec, con una distribución de errores relativamente equilibrada entre clases. A nivel global, los valores de F1-score son comparables a los obtenidos con otras representaciones, siendo la principal diferencia la mejora en la predicción de la clase minoritaria frente a TF-IDF. Esto sugiere que el mayor contexto semántico capturado por RoBERTa contribuye a una clasificación más consistente.
 
 #### **Comparación final**
 
@@ -202,6 +229,7 @@ El modelo ajustado mediante fine-tuning alcanza una accuracy cercana al 80% en e
 Los resultados obtenidos confirman que el fine-tuning de RoBERTa permite explotar de forma más efectiva la información contextual capturada por el modelo, superando el rendimiento alcanzado cuando los embeddings de RoBERTa se utilizan únicamente como características de entrada para clasificadores externos. No obstante, la mejora respecto a otros enfoques no es drástica, lo que sugiere que, para este problema concreto, modelos más simples ya capturan gran parte de la información relevante.
 
 ## **5.-Conclusiones**
+
 
 
 
