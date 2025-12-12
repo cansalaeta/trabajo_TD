@@ -1,4 +1,4 @@
-﻿# **CLASIFICADOR DE NOTICIAS ACERCA DEL COVID-19**
+﻿# **CLASIFICADOR DE FAKE-NEWS ACERCA DEL COVID-19**
 
 ## **1.-Descripción del problema**
 
@@ -12,7 +12,7 @@ Para abordar el problema, hemos contado con una base de datos con noticias recop
 
 <img width="790" height="490" alt="image" src="https://github.com/user-attachments/assets/f19ed717-adc3-4503-b334-b4a20e5a54a9" />
 
-En cuanto a esta subdivisión de las noticias falsas entre False y Partially False, dado que el número de noticias verdaderas es casi el doble, hemos podido comprobar que provoca una degradación en las prestaciones de algunos de los algoritmos de clasificación al intentar clasificar entre 3 etiquetas diferentes. Es por ello que se ha simplificado el problema a un clasificador binario de noticias true/false sobre el Covid-19 eliminando la categoría de Partially False.
+En cuanto a esta subdivisión de las noticias falsas entre False y Partially False, dado que el número de noticias verdaderas es casi el doble, hemos podido comprobar que provoca una degradación en las prestaciones de algunos de los algoritmos de clasificación al intentar clasificar entre 3 etiquetas diferentes. Es por ello que se ha simplificado el problema a un clasificador binario de noticias true/false sobre el COVID-19 eliminando la categoría de Partially False.
 
 Las noticias de nuestro dataset tienen de media unos 2250 caracteres y 365 palabras, es decir, que son noticias bastante largas. En el histograma de la siguiente figura se muestra la distribución del número de caracteres y palabras y la frecuencia con la que aparecen en las noticias. Encontramos noticias de hasta 5500 palabras y 32000 caracteres, luego para futuras secciones, aunque se reducirá considerablemente el vocabulario empleado, nos quedaremos con unas 8000 palabras. Es algo más de lo habitual, pero el objetivo es no perder información en nuestras noticias tan grandes.
 
@@ -59,6 +59,7 @@ Además, se ha dividido la base de datos en 3 conjuntos de *train*,*test* y *val
 
 
 ## **5.-Conclusiones**
+
 
 
 
