@@ -1,4 +1,4 @@
-﻿# **CLASIFICADOR DE NOTICIAS ACERCA DEL COVID-19**
+﻿# **CLASIFICADOR DE FAKE-NEWS ACERCA DEL COVID-19**
 
 ## **1.-Descripción del problema**
 
@@ -39,6 +39,7 @@ Además, se ha dividido la base de datos en 3 conjuntos de *train*,*test* y *val
 - Red Neuronal: En este caso se ha diseñado un modelo compuesto por capas de nodos (neuronas)
   
 - RoBERTa+Fine-Tunning:
+
 
 
 
