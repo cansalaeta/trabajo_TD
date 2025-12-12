@@ -24,7 +24,7 @@ Como trabajo previo a la presentación de las técnicas de vectorización y algo
 
 ## **3.-Metodologías utilizadas**
 
-### **3.1: Técnicas de vectorización:**
+### **3.1. Técnicas de vectorización:**
 
 Se ha presentado en el punto anterior el dataset (cuaderno 1 en github) con noticias desde el que partimos para entrenar, validar y testear nuestros modelos. Sin embargo, entrando ya en el cuaderno 2 subido a github, para entrenar un algoritmo de clasificación como SVM, redes neuronales, etc. necesitamos convertir el texto en representaciones numéricas, para lo cual empleamos 3 técnicas de vectorización diferentes que se presentan a continuación. Destacar que en este apartado del proyecto, tán solo hemos definido y experimentado con estos tres modelos aplicados sobre la base de datos global y será en el siguiente apartado donde dividiremos el dataset en *train*,*test* y *validation*.
 
@@ -34,7 +34,7 @@ Se ha presentado en el punto anterior el dataset (cuaderno 1 en github) con noti
 
 - Embeddings contextuales: Son vectores generados por modelos donde la representación de una palabra depende del contexto en el que aparece, es decir, capturan relaciones complejas entre palabras y son adecuados para representaciones profundas. En nuestro caso, igual que con TF-IDF, se ha realizado una comparativa entre 3 posibles modelos: BERT, RoBERTa y distilBERT. En este caso, para la elección del modelo más adecuado, hemos realizado una pequeña comparativa con una porción de la base de datos para ver cuál es el que ofrece mejores prestaciones. El resultado es que, para nuestra aplicación de clasificador *true*/*false*, es el modelo de RoBERTa el que mejor funciona, luego ha sido el que se ha escogido para los clasificadores que se presentan en el siguiente punto.
 
-### **3.2: Modelos de clasificación:**
+### **3.2. Modelos de clasificación:**
 
 Las técnicas de vectorización planteadas se han utilizado para adecuar las noticias de nuestra base de datos a entradas válidas que sirvan para 3 modelos que se han evaluado: 2 algoritmos de Scikit-Learn (Regresión Logística y SVM) y una red neuronal que hemos diseñado. Por otra parte, se ha utilizado fine-tunning sobre el modelo de RoBERTa hallado en el anterior punto (aunque aquí no se utilizan vectorizaciones). En cada uno de los casos, se han ido utilizando diferentes métricas de evaluación de resultados destacando *accuracy* para Regresión Logística y SVM y *matriz de confusión*, *f1-score* y *recall* para la red neuronal y modelo con fine-tunning.
 
@@ -125,7 +125,84 @@ Para terminar con la parte de clasificadores clásicos , en este apartado se va 
 
 Como se aprecia en los valores mostrados, ambos clasificadores presentan comportamientos muy similares en el conjunto de test para cada técnica de vectorización. Las diferencias entre Regresión Logística y SVM lineal son reducidas, siendo Word2Vec la representación que ofrece los mejores resultados en términos de accuracy para ambos modelos, mientras que RoBERTa, combinada con clasificadores lineales, muestra un rendimiento inferior. Estas observaciones refuerzan la idea de que la elección de la representación vectorial tiene un impacto mayor que la elección entre estos dos clasificadores lineales.
 
+### **4.6. Resultados con Red Neuronal**
+
+En este apartado se analizan los resultados obtenidos con la red neuronal implementada en PyTorch, aplicada a las distintas representaciones vectoriales consideradas: TF-IDF, Word2Vec y embeddings contextuales basados en RoBERTa. Para cada caso se presentan las métricas obtenidas en el conjunto de test, así como el comportamiento observado durante el entrenamiento a partir de las curvas de pérdida y precisión.
+
+#### **4.6.1. Red Neuronal con TF-IDF**
+
+| Métrica (Test)    | Valor  |
+| ----------------- | ------ |
+| Accuracy          | 0.7949 |
+| Precision (macro) | 0.7785 |
+| Recall (macro)    | 0.7496 |
+| F1-score (macro)  | 0.7600 |
+
+Como se puede ver en la tabla, la red neuronal entrenada sobre representaciones TF-IDF alcanza un rendimiento competitivo, con una accuracy cercana al 80% en el conjunto de test. Las métricas de precision, recall y F1-score muestran un comportamiento equilibrado, lo que indica una capacidad razonable para discriminar entre noticias verdaderas y falsas.
+
+Sin embargo, si nos fih¡jamos en las curvas de entrenamiento y validación, el modelo presenta una rápida reducción de la pérdida en entrenamiento acompañada de un incremento progresivo de la pérdida en validación. Este comportamiento evidencia un sobreajuste temprano, lo que limita la capacidad de generalización del modelo cuando se utilizan representaciones de alta dimensionalidad como TF-IDF.
+
+<img width="1087" height="443" alt="image" src="https://github.com/user-attachments/assets/7653859c-6620-4f3e-a107-d831dbbc0106" />
+
+#### **4.6.1. Red Neuronal con TF-IDF**
+
+| Métrica (Test)    | Valor  |
+| ----------------- | ------ |
+| Accuracy          | 0.7901 |
+| Precision (macro) | 0.7659 |
+| Recall (macro)    | 0.7712 |
+| F1-score (macro)  | 0.7684 |
+
+Como se puede ver resumido en la tabla, al emplear Word2Vec como técnica de vectorización, la red neuronal obtiene resultados similares en términos de accuracy, aunque con una ligera mejora en métricas como recall y F1-score. Esto sugiere una mejor capacidad del modelo para detectar correctamente ambas clases, especialmente la clase minoritaria.
+
+Además, las curvas de pérdida y precisión muestran un comportamiento más estable que en el caso de TF-IDF, con una menor divergencia entre entrenamiento y validación durante las primeras épocas. No obstante, el modelo sigue mostrando signos de sobreajuste a medida que avanza el entrenamiento, lo que limita las ganancias obtenidas frente a modelos más simples.
+
+<img width="1083" height="441" alt="image" src="https://github.com/user-attachments/assets/07a5a889-5665-4f1d-8b0b-cb769bbac5e5" />
+
+#### **4.6.3. Red Neuronal con RoBERTa**
+
+| Métrica (Test)    | Valor  |
+| ----------------- | ------ |
+| Accuracy          | 0.7869 |
+| Precision (macro) | 0.7624 |
+| Recall (macro)    | 0.7653 |
+| F1-score (macro)  | 0.7638 |
+
+Como vemos en la tabla en el caso de RoBERTa, la red neuronal alcanza un rendimiento comparable al obtenido con TF-IDF y Word2Vec. Las métricas de clasificación reflejan un comportamiento equilibrado, aunque sin una mejora clara respecto a las otras representaciones.
+
+Las curvas de entrenamiento muestran nuevamente una clara separación entre las métricas de entrenamiento y validación, lo que indica que la complejidad de los embeddings contextuales no se traduce directamente en una mejora del rendimiento cuando se utilizan arquitecturas densas estándar. Este resultado sugiere que los embeddings de RoBERTa requieren modelos más especializados o procesos de fine-tuning para explotar plenamente su potencial.
+
+<img width="1120" height="443" alt="image" src="https://github.com/user-attachments/assets/d7a67db4-aea0-4951-bcb5-e3ac8c89d6bb" />
+
+#### **Comparación final**
+
+Por último, se comparan los tres casos estudiados:
+
+<img width="1287" height="442" alt="image" src="https://github.com/user-attachments/assets/8a005cc7-ed13-4dd9-b3d9-5987763aaf0d" />
+
+Como se resume en la imagen, donde se compara el rendimiento en test de la red neuronal para las distintas vectorizaciones, las diferencias entre TF-IDF, Word2Vec y RoBERTa son relativamente reducidas en términos de accuracy y error rate. En todos los casos, la red neuronal logra resultados competitivos, pero sin superar de forma clara a los modelos lineales analizados previamente.
+
+Estos resultados indican que, para el problema abordado, el incremento de complejidad asociado a una red neuronal profunda no garantiza una mejora significativa del rendimiento. La elección de la representación vectorial sigue siendo un factor clave, y el uso de modelos más complejos debe ir acompañado de estrategias adicionales de regularización o arquitecturas adaptadas al tipo de embedding empleado.
+
+### **4.7. Fine-tuning de RoBERTa**
+
+En este apartado se presentan los resultados obtenidos tras aplicar fine-tuning sobre el modelo RoBERTa-base, adaptándolo directamente a la tarea de clasificación binaria de noticias true/false. A diferencia de los experimentos anteriores, en este caso el modelo se entrena de forma end-to-end, ajustando los pesos del Transformer a partir del conjunto de entrenamiento.
+
+Durante el preprocesado, el texto se tokeniza y se transforma en los campos input_ids y attention_mask, que constituyen la entrada del modelo, junto con las etiquetas correspondientes. El entrenamiento se ha realizado utilizando la librería Hugging Face Transformers, monitorizando la pérdida y las métricas de evaluación a lo largo de las épocas. Una vez hecho esto obtemnemos los siguientes resultados resumidos en la tabla:
+
+| Métrica (Test)    | Valor  |
+| ----------------- | ------ |
+| Accuracy          | 0.7997 |
+| Precision (macro) | 0.79   |
+| Recall (macro)    | 0.75   |
+| F1-score (macro)  | 0.76   |
+
+El modelo ajustado mediante fine-tuning alcanza una accuracy cercana al 80% en el conjunto de test, situándose entre los mejores resultados obtenidos a lo largo del proyecto. El informe de clasificación muestra un rendimiento especialmente alto en la detección de la clase true, con valores elevados de precision y recall, mientras que la clase false presenta mayores dificultades, algo consistente con el desbalance del dataset.
+
+Los resultados obtenidos confirman que el fine-tuning de RoBERTa permite explotar de forma más efectiva la información contextual capturada por el modelo, superando el rendimiento alcanzado cuando los embeddings de RoBERTa se utilizan únicamente como características de entrada para clasificadores externos. No obstante, la mejora respecto a otros enfoques no es drástica, lo que sugiere que, para este problema concreto, modelos más simples ya capturan gran parte de la información relevante.
+
 ## **5.-Conclusiones**
+
 
 
 
