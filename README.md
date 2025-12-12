@@ -24,7 +24,7 @@ Como trabajo previo a la presentación de las técnicas de vectorización y algo
 
 ## **3.-Metodologías utilizadas**
 
-***3.1: Técnicas de vectorización:***
+### **3.1: Técnicas de vectorización:**
 
 Se ha presentado en el punto anterior el dataset (cuaderno 1 en github) con noticias desde el que partimos para entrenar, validar y testear nuestros modelos. Sin embargo, entrando ya en el cuaderno 2 subido a github, para entrenar un algoritmo de clasificación como SVM, redes neuronales, etc. necesitamos convertir el texto en representaciones numéricas, para lo cual empleamos 3 técnicas de vectorización diferentes que se presentan a continuación. Destacar que en este apartado del proyecto, tán solo hemos definido y experimentado con estos tres modelos aplicados sobre la base de datos global y será en el siguiente apartado donde dividiremos el dataset en *train*,*test* y *validation*.
 
@@ -34,7 +34,7 @@ Se ha presentado en el punto anterior el dataset (cuaderno 1 en github) con noti
 
 - Embeddings contextuales: Son vectores generados por modelos donde la representación de una palabra depende del contexto en el que aparece, es decir, capturan relaciones complejas entre palabras y son adecuados para representaciones profundas. En nuestro caso, igual que con TF-IDF, se ha realizado una comparativa entre 3 posibles modelos: BERT, RoBERTa y distilBERT. En este caso, para la elección del modelo más adecuado, hemos realizado una pequeña comparativa con una porción de la base de datos para ver cuál es el que ofrece mejores prestaciones. El resultado es que, para nuestra aplicación de clasificador *true*/*false*, es el modelo de RoBERTa el que mejor funciona, luego ha sido el que se ha escogido para los clasificadores que se presentan en el siguiente punto.
 
-***3.2: Modelos de clasificación:***
+### **3.2: Modelos de clasificación:**
 
 Las técnicas de vectorización planteadas se han utilizado para adecuar las noticias de nuestra base de datos a entradas válidas que sirvan para 3 modelos que se han evaluado: 2 algoritmos de Scikit-Learn (Regresión Logística y SVM) y una red neuronal que hemos diseñado. Por otra parte, se ha utilizado fine-tunning sobre el modelo de RoBERTa hallado en el anterior punto (aunque aquí no se utilizan vectorizaciones). En cada uno de los casos, se han ido utilizando diferentes métricas de evaluación de resultados destacando *accuracy* para Regresión Logística y SVM y *matriz de confusión*, *f1-score* y *recall* para la red neuronal y modelo con fine-tunning.
 
@@ -85,10 +85,48 @@ Los resultados muestran que RoBERTa ofrece el mejor rendimiento entre los modelo
 
 En este apartado se presentan los resultados obtenidos al aplicar Regresión Logística sobre las distintas representaciones vectoriales analizadas previamente: TF-IDF, Word2Vec y embeddings contextuales basados en RoBERTa. Para cada caso se evalúa el rendimiento sobre los conjuntos de entrenamiento, validación y test mediante la métrica de accuracy.Los resultados obtenidos quedan resumidos en la siguiente tabla:
 
+| Vectorización | Accuracy (Test) | Error rate (Test) |
+|:--------------|:---------------:|:-----------------:|
+| TF-IDF        | 0.7933          | 0.2067            |
+| Word2Vec      | 0.8045          | 0.1955            |
+| RoBERTa       | 0.7660          | 0.2340            |
 
+En el caso de TF-IDF, la Regresión Logística alcanza los mejores resultados globales, con una accuracy del 87.7% en entrenamiento, 78.0% en validación y 79.3% en test. La diferencia moderada entre entrenamiento y test indica una buena capacidad de generalización, confirmando que esta representación basada en frecuencia resulta altamente efectiva para el problema planteado.
+Para Word2Vec, los resultados obtenidos son algo inferiores en entrenamiento (80.9%), pero comparables e incluso ligeramente superiores en validación (80.1%) y test (80.5%). Este comportamiento sugiere que la representación semántica densa permite una generalización más estable, aunque con menor capacidad de ajuste que TF-IDF.
+Por último, al emplear embeddings contextuales de RoBERTa junto con Regresión Logística, se obtienen valores de accuracy del 80.1% en entrenamiento, 77.6% en validación y 76.6% en test. A pesar de la mayor complejidad de esta representación, el clasificador lineal no consigue explotar plenamente la información contextual capturada por los embeddings, obteniendo resultados ligeramente inferiores a los de TF-IDF y Word2Vec.
+Estos resultados muestran que la Regresión Logística, a pesar de su simplicidad, ofrece un rendimiento muy competitivo cuando se combina con representaciones adecuadas, destacando especialmente la combinación con TF-IDF como una sólida línea base para el problema de clasificación de noticias true/false. En cambio, no explota todas las capacidades de técnicas más complejas como Word2Vec y RoBERTa.
 
+### **4.4. Resultados con Support Vector Machine (SVM)**
+
+En este apartado se presentan los resultados obtenidos al aplicar un clasificador SVM lineal sobre las distintas representaciones vectoriales analizadas: TF-IDF, Word2Vec y embeddings contextuales basados en RoBERTa. Al igual que en el caso anterior, el rendimiento se evalúa sobre los conjuntos de entrenamiento, validación y test utilizando la métrica de accuracy.
+Los resultados obtenidos en el conjunto de test se resumen en la siguiente tabla:
+
+| Vectorización | Accuracy (Test) | Error rate (Test) |
+|:--------------|:---------------:|:-----------------:|
+| TF-IDF        | 0.7901          | 0.2099            |
+| Word2Vec      | 0.8029          | 0.1971            |
+| RoBERTa       | 0.7580          | 0.2420            |
+
+En el caso de TF-IDF, el clasificador SVM lineal alcanza una accuracy del 92.4% en entrenamiento, 78.7% en validación y 79.0% en test. La diferencia entre entrenamiento y test sugiere una buena capacidad de ajuste del modelo, aunque con una ligera pérdida de generalización respecto al conjunto de entrenamiento.
+Para la representación basada en Word2Vec, se obtienen valores de accuracy del 81.6% en entrenamiento, 80.5% en validación y 80.3% en test. Estos resultados muestran un comportamiento más equilibrado entre los distintos conjuntos, indicando una mayor estabilidad del modelo cuando se utilizan embeddings semánticos densos.
+Por último, al emplear embeddings contextuales de RoBERTa junto con SVM lineal, se obtiene una accuracy del 81.9% en entrenamiento, 78.5% en validación y 75.8% en test. A pesar de la riqueza de la representación, el modelo no logra mejorar los resultados obtenidos con otras técnicas, lo que sugiere que el clasificador lineal no es capaz de explotar completamente la información contextual capturada por los embeddings.
+Los resultados muestran que el SVM lineal presenta un comportamiento consistente en función de la representación utilizada, siendo especialmente estable cuando se combina con Word2Vec, mientras que su rendimiento disminuye al emplear embeddings contextuales de mayor complejidad como RoBERTa.
+
+### **4.5 Comparativa Regresión Logística vs SVM**
+Para terminar con la parte de clasificadores clásicos , en este apartado se va a mostrar una breve comparación entre Regresión Logística y  SVM. Para ello usaremos los datos de test resumidos en la siguiente imagen y tabla:
+
+<img width="987" height="333" alt="image" src="https://github.com/user-attachments/assets/77e13069-9b93-466c-a045-a9082450fb52" />
+
+| Vectorización | Accuracy (Logistic) | Accuracy (SVM) | Error rate (Logistic) | Error rate (SVM) |
+|:--------------|:-------------------:|:--------------:|:---------------------:|:----------------:|
+| TF-IDF        | 0.7933              | 0.7901         | 0.2067                | 0.2099           |
+| Word2Vec      | 0.8045              | 0.8029         | 0.1955                | 0.1971           |
+| RoBERTa       | 0.7660              | 0.7580         | 0.2340                | 0.2420           |
+
+Como se aprecia en los valores mostrados, ambos clasificadores presentan comportamientos muy similares en el conjunto de test para cada técnica de vectorización. Las diferencias entre Regresión Logística y SVM lineal son reducidas, siendo Word2Vec la representación que ofrece los mejores resultados en términos de accuracy para ambos modelos, mientras que RoBERTa, combinada con clasificadores lineales, muestra un rendimiento inferior. Estas observaciones refuerzan la idea de que la elección de la representación vectorial tiene un impacto mayor que la elección entre estos dos clasificadores lineales.
 
 ## **5.-Conclusiones**
+
 
 
 
