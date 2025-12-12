@@ -228,9 +228,8 @@ El modelo ajustado mediante fine-tuning alcanza una accuracy cercana al 80% en e
 
 Los resultados obtenidos confirman que el fine-tuning de RoBERTa permite explotar de forma más efectiva la información contextual capturada por el modelo, superando el rendimiento alcanzado cuando los embeddings de RoBERTa se utilizan únicamente como características de entrada para clasificadores externos. No obstante, la mejora respecto a otros enfoques no es drástica, lo que sugiere que, para este problema concreto, modelos más simples ya capturan gran parte de la información relevante.
 
-## **5.-Conclusiones**
 
-## **6.-Proyecto de Extensión**
+## **5.-Proyecto de Extensión**
 Como extensión del proyecto principal, y dado que en la introducción del trabajo se planteaba la hipótesis de que las noticias falsas tienden a presentar un lenguaje más negativo o alarmista, se ha llevado a cabo un análisis de sentimiento sobre el contenido textual de las noticias. El objetivo de esta extensión es evaluar si existen diferencias significativas en el sentimiento entre noticias verdaderas y falsas que puedan complementar los resultados de clasificación obtenidos previamente.
 
 Para ello, se han empleado dos enfoques distintos en función del tipo de texto analizado:
@@ -238,7 +237,7 @@ Para ello, se han empleado dos enfoques distintos en función del tipo de texto 
 - VADER para el análisis de sentimiento en los títulos de las noticias.
 - Flair para el análisis de sentimiento en el cuerpo completo de las noticias.
 
-### **6.1. Análisis de sentimiento en títulos con VADER**
+### **5.1. Análisis de sentimiento en títulos con VADER**
 
 En primer lugar, se ha analizado el sentimiento de los títulos de las noticias utilizando la librería VADER, una herramienta basada en léxico y reglas que genera una puntuación continua entre −1 (muy negativo) y 1 (muy positivo). Este análisis resulta adecuado para textos cortos como titulares. Se han obtenido los siguientes resultados:
 
@@ -261,7 +260,7 @@ El análisis del sentimiento medio por etiqueta (0 = false, 1 = true) muestra va
 
 Estos resultados indican que, en el caso de los títulos, no se observan diferencias claras de sentimiento entre noticias verdaderas y falsas. La hipótesis inicial de que los títulos de noticias falsas presentan un tono más negativo no puede confirmarse a partir de este análisis.
 
-### **6.2. Análisis de sentimiento en el cuerpo de las noticias con Flair**
+### **5.2. Análisis de sentimiento en el cuerpo de las noticias con Flair**
 
 Dado que el análisis de sentimiento en títulos no resulta concluyente, se ha extendido el estudio al cuerpo completo de las noticias. Para ello se ha utilizado la librería Flair, más adecuada para textos largos y complejos, ya que emplea modelos de lenguaje entrenados específicamente para clasificación de sentimiento. Se han obtenido los siguientes resultados:
 
@@ -288,6 +287,39 @@ Este comportamiento indica que no existe una diferencia significativa en el sent
 
 Los resultados obtenidos en este proyecto de extensión sugieren que el sentimiento negativo no es un factor discriminante entre noticias verdaderas y falsas en la base de datos analizada. Aunque inicialmente podría esperarse un mayor tono negativo o catastrofista en las noticias falsas, el análisis muestra que este tipo de lenguaje es común a ambas clases.
 Por lo tanto, el análisis de sentimiento, al menos en su forma directa, no aporta una separación clara entre clases, lo que refuerza la necesidad de recurrir a enfoques más complejos basados en patrones semánticos y contextuales, como los modelos de clasificación desarrollados en el proyecto principal.
+
+## **6.-Conclusiones**
+
+En este trabajo se ha abordado el problema de la clasificación automática de noticias relacionadas con la COVID-19 como verdaderas o falsas, analizando de forma sistemática el impacto de distintas técnicas de vectorización y modelos de clasificación. Para finalizar, en este apartado vamos a recoger todas las conclusiones que hemos ido mencionando y recopilando a lo largo del proyecto. En la siguiente tabla se muestra una comparativa global de rendimiento usando el accuracy en test:
+
+| Modelo | Vectorización / Enfoque | Accuracy (Test) |
+|-------|-------------------------|-----------------|
+| Regresión Logística | Word2Vec | 0.8045 |
+| SVM lineal | Word2Vec | 0.8029 |
+| Red Neuronal | TF-IDF | 0.7949 |
+| RoBERTa (Fine-tuning) | End-to-end | 0.7997 |
+
+Los resultados experimentales muestran que es posible alcanzar valores de accuracy cercanos al 80% utilizando enfoques muy diversos, lo que pone de manifiesto la viabilidad del uso de técnicas de Procesamiento del Lenguaje Natural para la detección de desinformación.
+
+Una de las principales conclusiones del estudio es que la representación del texto tiene un impacto tan relevante como el propio modelo de clasificación. Técnicas relativamente simples como TF-IDF y Word2Vec, combinadas con clasificadores lineales como Regresión Logística o SVM, ofrecen un rendimiento muy competitivo, comparable al de modelos más complejos. En particular, Word2Vec proporciona una representación semántica que mejora la estabilidad del modelo y reduce ciertos sesgos observados en enfoques puramente basados en frecuencia.
+
+Por otro lado, los modelos más complejos, como la red neuronal y el fine-tuning de RoBERTa, no garantizan automáticamente una mejora significativa del rendimiento. En el caso de la red neuronal, se observa una mayor capacidad de ajuste acompañada de problemas de sobreajuste, mientras que el fine-tuning de RoBERTa logra explotar mejor la información contextual del texto, aunque con un coste computacional considerablemente mayor. Estos resultados sugieren que, para este problema concreto, el incremento de complejidad debe evaluarse cuidadosamente frente a las ganancias reales obtenidas.
+
+Finalmente, el análisis de sentimiento realizado como proyecto de extensión indica que el lenguaje negativo predomina tanto en noticias verdaderas como falsas, lo que dificulta el uso del sentimiento como un criterio discriminante claro. Este hecho refuerza la idea de que la detección de desinformación requiere modelos capaces de capturar patrones semánticos y contextuales más profundos, más allá de características superficiales como el tono emocional del texto.
+
+### **6.1. Limitaciones**
+
+Este trabajo presenta algunas limitaciones que deben considerarse al interpretar los resultados. En primer lugar, el análisis se ha realizado sobre un dataset específico de noticias relacionadas con la COVID-19, lo que limita la generalización de los modelos a otros dominios informativos. Además, el problema se ha simplificado a una clasificación binaria, eliminando la categoría partially false, lo que reduce la granularidad del análisis en escenarios reales de verificación.
+
+Por otro lado, los modelos más complejos, como la red neuronal y el fine-tuning de RoBERTa, implican un mayor coste computacional y presentan signos de sobreajuste, lo que dificulta su aplicación en entornos con recursos limitados. Asimismo, el análisis de sentimiento realizado no ha mostrado una capacidad discriminante clara entre noticias verdaderas y falsas, limitando su utilidad como característica independiente.
+
+### **6.2. Trabajo futuro**
+
+Como trabajo futuro, sería interesante extender el estudio a una clasificación multiclase, reincorporando la etiqueta partially false, así como evaluar la generalización de los modelos en otros conjuntos de datos y dominios temáticos. Esto permitiría validar la robustez de los enfoques propuestos frente a distintos tipos de desinformación.
+
+Adicionalmente, podrían explorarse arquitecturas neuronales más específicas para embeddings contextuales, técnicas de regularización más avanzadas y métodos de explicabilidad que faciliten la interpretación de las decisiones del modelo. La incorporación de información adicional, como metadatos o fuentes de las noticias, constituye también una línea prometedora para mejorar el rendimiento en aplicaciones reales.
+
+
 
 
 
