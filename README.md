@@ -1,4 +1,4 @@
-﻿# **CLASIFICADOR DE FAKE-NEWS ACERCA DEL COVID-19**
+﻿# **CLASIFICADOR DE NOTICIAS ACERCA DEL COVID-19**
 
 ## **1.-Descripción del problema**
 
@@ -11,6 +11,11 @@ En este proyecto se han desarrollado diferentes modelos de clasificación autom�
 Para abordar el problema, hemos contado con una base de datos con noticias recopiladas de diferentes fuentes y etiquetadas como 1-True o 0-False/Partially False. Concretamente, hay un total de 3119 noticias, repartidas entre 2061 verdaderas y 1058 falsas, de las que no solo se muestra la noticia y la etiqueta, sino también el título y la categoría (True/False/Partially False). 
 
 En cuanto a esta subdivisión de las noticias falsas entre False y Partially False, dado que el número de noticias verdaderas es casi el doble, hemos podido comprobar que provoca una degradación en las prestaciones de algunos de los algoritmos de clasificación al intentar clasificar entre 3 etiquetas diferentes. Es por ello que se ha simplificado el problema a un clasificador binario de noticias true/false sobre el Covid-19 eliminando la categoría de Partially False.
+
+En cuanto a la longitud de las noticias
+
+<img width="1624" height="573" alt="image" src="https://github.com/user-attachments/assets/e0ed4707-3508-4b86-95c3-74e5e58e23ca" />
+
 
 Como trabajo previo a la presentación de las técnicas de vectorización y algoritmos clasificadores, se ha realizado una limpieza y homogeneización de este conjunto de noticias para evitar que caracteres, urls y palabras concretas (como cambiar *viru* por *virus*) entren a nuestros modelos e introduzcan ruido que dificulte el trabajo de clasificación.
 
@@ -38,10 +43,13 @@ Además, se ha dividido la base de datos en 3 conjuntos de *train*,*test* y *val
   
 - Red Neuronal: En este caso se ha diseñado un modelo compuesto por capas de nodos (neuronas)
   
-- RoBERTa+Fine-Tunning:
+- RoBERTa+Fine-Tunning: Partiendo del modelo preentrenado de Hugging face de RoBERTa
+
+## **4.-Resultados experimentales**
 
 
 
+## **5.-Conclusiones**
 
 
 
