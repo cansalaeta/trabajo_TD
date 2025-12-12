@@ -284,10 +284,11 @@ En este caso, el análisis se ha centrado en dos categorías de sentimiento: pos
 
 Este comportamiento indica que no existe una diferencia significativa en el sentimiento global del texto entre noticias verdaderas y falsas. El lenguaje negativo predomina de forma generalizada, lo cual puede explicarse por el contexto del dataset, centrado en noticias relacionadas con la pandemia de COVID-19, un tema intrínsecamente asociado a situaciones adversas y lenguaje alarmista.
 
-### **Conclusión final**
+### **Conclusión proyecto de extensión**
 
 Los resultados obtenidos en este proyecto de extensión sugieren que el sentimiento negativo no es un factor discriminante entre noticias verdaderas y falsas en la base de datos analizada. Aunque inicialmente podría esperarse un mayor tono negativo o catastrofista en las noticias falsas, el análisis muestra que este tipo de lenguaje es común a ambas clases.
 Por lo tanto, el análisis de sentimiento, al menos en su forma directa, no aporta una separación clara entre clases, lo que refuerza la necesidad de recurrir a enfoques más complejos basados en patrones semánticos y contextuales, como los modelos de clasificación desarrollados en el proyecto principal.
+
 
 
 
