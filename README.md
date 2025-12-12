@@ -28,11 +28,11 @@ Como trabajo previo a la presentación de las técnicas de vectorización y algo
 
 Se ha presentado en el punto anterior el dataset (cuaderno 1 en github) con noticias desde el que partimos para entrenar, validar y testear nuestros modelos. Sin embargo, entrando ya en el cuaderno 2 subido a github, para entrenar un algoritmo de clasificación como SVM, redes neuronales, etc. necesitamos convertir el texto en representaciones numéricas, para lo cual empleamos 3 técnicas de vectorización diferentes que se presentan a continuación. Destacar que en este apartado del proyecto, tán solo hemos definido y experimentado con estos tres modelos aplicados sobre la base de datos global y será en el siguiente apartado donde dividiremos el dataset en *train*,*test* y *validation*.
 
-- TF-IDF: Esta técnica transforma cada una de nuestras noticias en un vector basándose únicamente en la importancia de las palabras en las noticias. Para implementarlo, se han propuesto 2 alternativas con dos librerías de python: gensim (partiendo de una descripción *Bag of Words*) y un modelo ya definido de sklearn. Las prestaciones en ambos casos hemos comprobado que son prácticamente iguales y por simplicidad, se ha utilizado el modelo de sklearn, que internamente realiza la tokenización de las noticias, vectorización y reducción del vocabulario. Esto es un punto importante, pues el vocabulario original de la base de datos está en torno a 37000 palabras, lo cual es difícil (e innecesario) de manejar por los modelos. Es por ello que se han suprimido aquellas palabras que han aparecido en más del 60% de las noticias o que aparecen en menos de 10.
+- ***TF-IDF:*** Esta técnica transforma cada una de nuestras noticias en un vector basándose únicamente en la importancia de las palabras en las noticias. Para implementarlo, se han propuesto 2 alternativas con dos librerías de python: gensim (partiendo de una descripción *Bag of Words*) y un modelo ya definido de sklearn. Las prestaciones en ambos casos hemos comprobado que son prácticamente iguales y por simplicidad, se ha utilizado el modelo de sklearn, que internamente realiza la tokenización de las noticias, vectorización y reducción del vocabulario. Esto es un punto importante, pues el vocabulario original de la base de datos está en torno a 37000 palabras, lo cual es difícil (e innecesario) de manejar por los modelos. Es por ello que se han suprimido aquellas palabras que han aparecido en más del 60% de las noticias o que aparecen en menos de 10.
   
-- Word2Vec: Es un modelo que aprende embeddings semánticos de palabras, es decir, vectores densos donde palabras con significados similares tienen representaciones similares. Es una técnica a priori más compleja que TF-IDF (que solo se basa en frecuencia de aparición de las palabras) y esto se ve reflejado en los resultados que se presentarán posteriormente. A diferencia de TF-IDF, que partía de las noticias "limpias y homogeneizadas", en este caso se parte de los tokens de dichas noticias. Igual que antes, se ha realizado una reducción del vocabulario antes de calcular embeddings y para facilitar tareas futuras.
+- ***Word2Vec:*** Es un modelo que aprende embeddings semánticos de palabras, es decir, vectores densos donde palabras con significados similares tienen representaciones similares. Es una técnica a priori más compleja que TF-IDF (que solo se basa en frecuencia de aparición de las palabras) y esto se ve reflejado en los resultados que se presentarán posteriormente. A diferencia de TF-IDF, que partía de las noticias "limpias y homogeneizadas", en este caso se parte de los tokens de dichas noticias. Igual que antes, se ha realizado una reducción del vocabulario antes de calcular embeddings y para facilitar tareas futuras.
 
-- Embeddings contextuales: Son vectores generados por modelos donde la representación de una palabra depende del contexto en el que aparece, es decir, capturan relaciones complejas entre palabras y son adecuados para representaciones profundas. En nuestro caso, igual que con TF-IDF, se ha realizado una comparativa entre 3 posibles modelos: BERT, RoBERTa y distilBERT. En este caso, para la elección del modelo más adecuado, hemos realizado una pequeña comparativa con una porción de la base de datos para ver cuál es el que ofrece mejores prestaciones. El resultado es que, para nuestra aplicación de clasificador *true*/*false*, es el modelo de RoBERTa el que mejor funciona, luego ha sido el que se ha escogido para los clasificadores que se presentan en el siguiente punto.
+- ***Embeddings contextuales:*** Son vectores generados por modelos donde la representación de una palabra depende del contexto en el que aparece, es decir, capturan relaciones complejas entre palabras y son adecuados para representaciones profundas. En nuestro caso, igual que con TF-IDF, se ha realizado una comparativa entre 3 posibles modelos: BERT, RoBERTa y distilBERT. En este caso, para la elección del modelo más adecuado, hemos realizado una pequeña comparativa con una porción de la base de datos para ver cuál es el que ofrece mejores prestaciones. El resultado es que, para nuestra aplicación de clasificador *true*/*false*, es el modelo de RoBERTa el que mejor funciona, luego ha sido el que se ha escogido para los clasificadores que se presentan en el siguiente punto.
 
 ### **3.2. Modelos de clasificación:**
 
@@ -40,19 +40,19 @@ Las técnicas de vectorización planteadas se han utilizado para adecuar las not
 
 Además, se ha dividido la base de datos en 3 conjuntos de *train*,*test* y *validation*, con una cantidad de noticias del 60%, 20% y 20% del total respectivamente. Así, tanto para la red neuronal como para Regresión Logística y SVM, se han utilizado los modelos definidos en el punto anterior aplicados sobre los tres conjuntos, de forma que cada técnica de vectorización tenga su dataset de *train*,*test* y *validation*.
 
-- Regresión Logística: Es un modelo estadístico lineal que predice la probabilidad de que una instancia pertenezca a una clase usando una función sigmoide. A priori es el clasificador más simple de los utilizados, pero como veremos en el siguiente punto, las prestaciones que ofrece son realmente buenas.
+- ***Regresión Logística:*** Es un modelo estadístico lineal que predice la probabilidad de que una instancia pertenezca a una clase usando una función sigmoide. A priori es el clasificador más simple de los utilizados, pero como veremos en el siguiente punto, las prestaciones que ofrece son realmente buenas.
 
-- Supporrt Vector Machine (SVM): Es un modelo de aprendizaje supervisado que busca un límite óptimo que separe las clases con el mayor margen posible (en este caso nuestras noticias *true*/*false*). Se ha escogido por ser un modelo bastante diferente del de Regresión Logística y, en principio, más complejos. En el siguiente apartado se ofrecen los resultados obtenidos en comparación con Regresión Logística.
+- ***Supporrt Vector Machine (SVM):*** Es un modelo de aprendizaje supervisado que busca un límite óptimo que separe las clases con el mayor margen posible (en este caso nuestras noticias *true*/*false*). Se ha escogido por ser un modelo bastante diferente del de Regresión Logística y, en principio, más complejos. En el siguiente apartado se ofrecen los resultados obtenidos en comparación con Regresión Logística.
   
-- Red Neuronal: En este caso se ha diseñado un modelo supervisado compuesto por capas de nodos (neuronas) para clasificar noticias sobre COVID-19 como verdaderas o falsas usando vectores TF-IDF, Word2Vec y Embeddings Contextuales (RoBERTa).
+- ***Red Neuronal:*** En este caso se ha diseñado un modelo supervisado compuesto por capas de nodos (neuronas) para clasificar noticias sobre COVID-19 como verdaderas o falsas usando vectores TF-IDF, Word2Vec y Embeddings Contextuales (RoBERTa).
 
   Hemos implementado una arquitectura con tres capas ocultas (de 1024, 512 y 128 neuronas), con ReLU, Batch Normalization, Dropout progresivo para prevenir sobreajuste y una capa de salida con sigmoide para clasificación binaria. Dado que es binaria, se ha establecido la red con una única salida para reducir la complejidad de la misma, pues es suficiente para deducir si la noticia es verdadera (salida=1) o falsa (salida=0).
 
   Para el entrenamiento, hemos utilizado un optimizador Adam y BCEWithLogitsLoss como función de pérdidas, que combina sigmoide + Binary Cross Entropy. Los datos se procesan en mini-batches con validación para controlar el rendimiento y se han ido ajustando los parámetros de learning rate, número de neuronas de las capas ocultas, dropout, weight decay, etc. hasta obtener los resultados que se presentan en la siguiente sección.
   
-- RoBERTa+Fine-Tunning: Se ha realizado fine-tunning al modelo preentrenado de RoBERTa. El fine-tuning consiste en ajustar un modelo preentrenado a una tarea específica usando tus propios datos. En nuestro caso, hemos entrenado RoBERTa con noticias sobre COVID-19 para que aprenda a clasificar automáticamente noticias verdaderas y falsas, combinando su conocimiento general del lenguaje con los patrones específicos de nuestro dataset. Los resultados han sido positivos y, nuevamente, se presentan y comparan en la siguiente sección.
+- ***RoBERTa+Fine-Tunning:*** Se ha realizado fine-tunning al modelo preentrenado de RoBERTa. El fine-tuning consiste en ajustar un modelo preentrenado a una tarea específica usando tus propios datos. En nuestro caso, hemos entrenado RoBERTa con noticias sobre COVID-19 para que aprenda a clasificar automáticamente noticias verdaderas y falsas, combinando su conocimiento general del lenguaje con los patrones específicos de nuestro dataset. Los resultados han sido positivos y, nuevamente, se presentan y comparan en la siguiente sección.
   
-- TRABAJO DE EXTENSIÓN: Como trabajo extra para complementar los resultados obtenidos, se ha realizado un análisis del sentimiento (positivo, negativo o neutro) para cada una de las noticias. el objetivo es verificar si la hipótesis de la que partíamos, que en las noticias falsas suele predominar un sentimiento negativo (dentro de que durante el COVID-19, la mayor parte de las noticias eran negativas) es verdad o no. Para ello, se han realizado 2 análisis con 2 librerías diferentes: VADER y Flair. Con la primera se han analizado los títulos de las noticias, que hasta este momento no se habían utilizado, clasificando el sentimiento como positivo, negativo o neutro. Con Flair, se han categorizado las noticias analizando el cuerpo de las mismas y suprimiendo la categoría neutra. El motivo por el que se han utilizado librerías diferentes es que con VADER, para textos muy largos (como el caso de nuestras noticias), el sentimiento suele caer en neutro y por lo tanto no íbamos a poder extraer demasiadas conclusiones. Esta información nos permite explorar patrones adicionales que podrían ayudar a distinguir noticias verdaderas de falsas.
+- ***TRABAJO DE EXTENSIÓN:*** Como trabajo extra para complementar los resultados obtenidos, se ha realizado un análisis del sentimiento (positivo, negativo o neutro) para cada una de las noticias. el objetivo es verificar si la hipótesis de la que partíamos, que en las noticias falsas suele predominar un sentimiento negativo (dentro de que durante el COVID-19, la mayor parte de las noticias eran negativas) es verdad o no. Para ello, se han realizado 2 análisis con 2 librerías diferentes: VADER y Flair. Con la primera se han analizado los títulos de las noticias, que hasta este momento no se habían utilizado, clasificando el sentimiento como positivo, negativo o neutro. Con Flair, se han categorizado las noticias analizando el cuerpo de las mismas y suprimiendo la categoría neutra. El motivo por el que se han utilizado librerías diferentes es que con VADER, para textos muy largos (como el caso de nuestras noticias), el sentimiento suele caer en neutro y por lo tanto no íbamos a poder extraer demasiadas conclusiones. Esta información nos permite explorar patrones adicionales que podrían ayudar a distinguir noticias verdaderas de falsas.
 
 ## **4.-Resultados experimentales**
 ### **4.1. Protocolo experimental y métricas de evaluación**
@@ -129,7 +129,7 @@ Como se aprecia en los valores mostrados, ambos clasificadores presentan comport
 
 En este apartado se analizan los resultados obtenidos con la red neuronal implementada en PyTorch, aplicada a las distintas representaciones vectoriales consideradas: TF-IDF, Word2Vec y embeddings contextuales basados en RoBERTa. Para cada caso se presentan las métricas obtenidas en el conjunto de test, así como el comportamiento observado durante el entrenamiento a partir de las curvas de pérdida y precisión.
 
-#### **4.6.1. hazTF-IDF**
+#### **4.6.1. TF-IDF**
 
 | Métrica (Test)    | Valor  |
 | ----------------- | ------ |
@@ -140,7 +140,7 @@ En este apartado se analizan los resultados obtenidos con la red neuronal implem
 
 Como se puede ver en la tabla, la red neuronal entrenada sobre representaciones TF-IDF alcanza un rendimiento competitivo, con una accuracy cercana al 80% en el conjunto de test. Las métricas de precision, recall y F1-score muestran un comportamiento equilibrado, lo que indica una capacidad razonable para discriminar entre noticias verdaderas y falsas.
 
-Sin embargo, si nos fih¡jamos en las curvas de entrenamiento y validación, el modelo presenta una rápida reducción de la pérdida en entrenamiento acompañada de un incremento progresivo de la pérdida en validación. Este comportamiento evidencia un sobreajuste temprano, lo que limita la capacidad de generalización del modelo cuando se utilizan representaciones de alta dimensionalidad como TF-IDF.
+Sin embargo, si nos fijamos en las curvas de entrenamiento y test, el modelo presenta una rápida reducción de la pérdida en entrenamiento acompañada de un incremento progresivo de la pérdida en test. Este comportamiento evidencia un sobreajuste temprano, lo que limita la capacidad de generalización del modelo cuando se utilizan representaciones de alta dimensionalidad como TF-IDF.
 
 <img width="1087" height="443" alt="image" src="https://github.com/user-attachments/assets/7653859c-6620-4f3e-a107-d831dbbc0106" />
 
@@ -164,7 +164,7 @@ Vemos que TF-IDF muestra un mayor número de falsos positivos, es decir, noticia
 
 Como se puede ver resumido en la tabla, al emplear Word2Vec como técnica de vectorización, la red neuronal obtiene resultados similares en términos de accuracy, aunque con una ligera mejora en métricas como recall y F1-score. Esto sugiere una mejor capacidad del modelo para detectar correctamente ambas clases, especialmente la clase minoritaria.
 
-Además, las curvas de pérdida y precisión muestran un comportamiento más estable que en el caso de TF-IDF, con una menor divergencia entre entrenamiento y validación durante las primeras épocas. No obstante, el modelo sigue mostrando signos de sobreajuste a medida que avanza el entrenamiento, lo que limita las ganancias obtenidas frente a modelos más simples.
+Además, las curvas de pérdida y precisión muestran un comportamiento más estable que en el caso de TF-IDF, con una menor divergencia entre entrenamiento y test durante las primeras épocas. No obstante, el modelo sigue mostrando signos de sobreajuste a medida que avanza el entrenamiento, lo que limita las ganancias obtenidas frente a modelos más simples.
 
 <img width="1083" height="441" alt="image" src="https://github.com/user-attachments/assets/07a5a889-5665-4f1d-8b0b-cb769bbac5e5" />
 
@@ -188,7 +188,7 @@ Para Word2Vec, los errores de clasificación se encuentran más equilibrados ent
 
 Como vemos en la tabla en el caso de RoBERTa, la red neuronal alcanza un rendimiento comparable al obtenido con TF-IDF y Word2Vec. Las métricas de clasificación reflejan un comportamiento equilibrado, aunque sin una mejora clara respecto a las otras representaciones.
 
-Las curvas de entrenamiento muestran nuevamente una clara separación entre las métricas de entrenamiento y validación, lo que indica que la complejidad de los embeddings contextuales no se traduce directamente en una mejora del rendimiento cuando se utilizan arquitecturas densas estándar. Este resultado sugiere que los embeddings de RoBERTa requieren modelos más especializados o procesos de fine-tuning para explotar plenamente su potencial.
+Las curvas de entrenamiento muestran nuevamente una clara separación entre las métricas de entrenamiento y test, lo que indica que la complejidad de los embeddings contextuales no se traduce directamente en una mejora del rendimiento cuando se utilizan arquitecturas densas estándar. Este resultado sugiere que los embeddings de RoBERTa requieren modelos más especializados o procesos de fine-tuning para explotar plenamente su potencial.
 
 <img width="1120" height="443" alt="image" src="https://github.com/user-attachments/assets/d7a67db4-aea0-4951-bcb5-e3ac8c89d6bb" />
 
@@ -229,6 +229,67 @@ El modelo ajustado mediante fine-tuning alcanza una accuracy cercana al 80% en e
 Los resultados obtenidos confirman que el fine-tuning de RoBERTa permite explotar de forma más efectiva la información contextual capturada por el modelo, superando el rendimiento alcanzado cuando los embeddings de RoBERTa se utilizan únicamente como características de entrada para clasificadores externos. No obstante, la mejora respecto a otros enfoques no es drástica, lo que sugiere que, para este problema concreto, modelos más simples ya capturan gran parte de la información relevante.
 
 ## **5.-Conclusiones**
+
+## **6.-Proyecto de Extensión**
+Como extensión del proyecto principal, y dado que en la introducción del trabajo se planteaba la hipótesis de que las noticias falsas tienden a presentar un lenguaje más negativo o alarmista, se ha llevado a cabo un análisis de sentimiento sobre el contenido textual de las noticias. El objetivo de esta extensión es evaluar si existen diferencias significativas en el sentimiento entre noticias verdaderas y falsas que puedan complementar los resultados de clasificación obtenidos previamente.
+
+Para ello, se han empleado dos enfoques distintos en función del tipo de texto analizado:
+
+- VADER para el análisis de sentimiento en los títulos de las noticias.
+- Flair para el análisis de sentimiento en el cuerpo completo de las noticias.
+
+### **6.1. Análisis de sentimiento en títulos con VADER**
+
+En primer lugar, se ha analizado el sentimiento de los títulos de las noticias utilizando la librería VADER, una herramienta basada en léxico y reglas que genera una puntuación continua entre −1 (muy negativo) y 1 (muy positivo). Este análisis resulta adecuado para textos cortos como titulares. Se han obtenido los siguientes resultados:
+
+| Etiqueta | Sentimiento medio |
+|----------|-------------------|
+| False (0) | -0.0650 |
+| True (1)  | -0.0626 |
+
+| Etiqueta | Negativo | Neutral | Positivo |
+|----------|----------|---------|----------|
+| False (0) | 355 | 480 | 223 |
+| True (1)  | 684 | 891 | 486 |
+
+| Etiqueta | Negativo | Neutral | Positivo |
+|----------|----------|---------|----------|
+| False (0) | 0.3355 | 0.4537 | 0.2108 |
+| True (1)  | 0.3319 | 0.4323 | 0.2358 |
+
+El análisis del sentimiento medio por etiqueta (0 = false, 1 = true) muestra valores muy próximos entre ambas clases, con una ligera tendencia negativa en ambos casos. Asimismo, la distribución del sentimiento revela que la mayoría de los títulos se clasifican como neutrales, tanto para noticias verdaderas como falsas, siendo el sentimiento negativo el segundo más frecuente.
+
+Estos resultados indican que, en el caso de los títulos, no se observan diferencias claras de sentimiento entre noticias verdaderas y falsas. La hipótesis inicial de que los títulos de noticias falsas presentan un tono más negativo no puede confirmarse a partir de este análisis.
+
+### **6.2. Análisis de sentimiento en el cuerpo de las noticias con Flair**
+
+Dado que el análisis de sentimiento en títulos no resulta concluyente, se ha extendido el estudio al cuerpo completo de las noticias. Para ello se ha utilizado la librería Flair, más adecuada para textos largos y complejos, ya que emplea modelos de lenguaje entrenados específicamente para clasificación de sentimiento. Se han obtenido los siguientes resultados:
+
+| Etiqueta | Sentimiento medio |
+|----------|-------------------|
+| False (0) | 0.9613 |
+| True (1)  | 0.9580 |
+
+| Etiqueta | Negativo | Positivo |
+|----------|----------|----------|
+| False (0) | 867 | 191 |
+| True (1)  | 1742 | 319 |
+
+| Etiqueta | Negativo | Positivo |
+|----------|----------|----------|
+| False (0) | 0.8195 | 0.1805 |
+| True (1)  | 0.8452 | 0.1548 |
+
+En este caso, el análisis se ha centrado en dos categorías de sentimiento: positivo y negativo, eliminando la clase neutral. Los resultados muestran que, tanto para noticias verdaderas como falsas, entre el 80% y el 85% del contenido presenta un sentimiento negativo, siendo esta la categoría claramente dominante en ambas clases.
+
+Este comportamiento indica que no existe una diferencia significativa en el sentimiento global del texto entre noticias verdaderas y falsas. El lenguaje negativo predomina de forma generalizada, lo cual puede explicarse por el contexto del dataset, centrado en noticias relacionadas con la pandemia de COVID-19, un tema intrínsecamente asociado a situaciones adversas y lenguaje alarmista.
+
+### **Conclusión final**
+
+Los resultados obtenidos en este proyecto de extensión sugieren que el sentimiento negativo no es un factor discriminante entre noticias verdaderas y falsas en la base de datos analizada. Aunque inicialmente podría esperarse un mayor tono negativo o catastrofista en las noticias falsas, el análisis muestra que este tipo de lenguaje es común a ambas clases.
+Por lo tanto, el análisis de sentimiento, al menos en su forma directa, no aporta una separación clara entre clases, lo que refuerza la necesidad de recurrir a enfoques más complejos basados en patrones semánticos y contextuales, como los modelos de clasificación desarrollados en el proyecto principal.
+
+
 
 
 
