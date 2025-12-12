@@ -55,10 +55,35 @@ Además, se ha dividido la base de datos en 3 conjuntos de *train*,*test* y *val
 - TRABAJO DE EXTENSIÓN: Como trabajo extra para complementar los resultados obtenidos, se ha realizado un análisis del sentimiento (positivo, negativo o neutro) para cada una de las noticias. el objetivo es verificar si la hipótesis de la que partíamos, que en las noticias falsas suele predominar un sentimiento negativo (dentro de que durante el COVID-19, la mayor parte de las noticias eran negativas) es verdad o no. Para ello, se han realizado 2 análisis con 2 librerías diferentes: VADER y Flair. Con la primera se han analizado los títulos de las noticias, que hasta este momento no se habían utilizado, clasificando el sentimiento como positivo, negativo o neutro. Con Flair, se han categorizado las noticias analizando el cuerpo de las mismas y suprimiendo la categoría neutra. El motivo por el que se han utilizado librerías diferentes es que con VADER, para textos muy largos (como el caso de nuestras noticias), el sentimiento suele caer en neutro y por lo tanto no íbamos a poder extraer demasiadas conclusiones. Esta información nos permite explorar patrones adicionales que podrían ayudar a distinguir noticias verdaderas de falsas.
 
 ## **4.-Resultados experimentales**
+***4.1. Protocolo experimental y métricas de evaluación***
+Para la evaluación de los distintos modelos de clasificación propuestos, se han usado métricas que permiten comparar de forma justa las diferentes combinaciones de técnicas de vectorización y algoritmos de clasificación. 
+En primer lugar, el conjunto de datos se ha dividido en tres subconjuntos: un 60% para entrenamiento, un 20% para validación y un 20% para test, manteniendo la proporción de clases en cada uno de ellos. El conjunto de entrenamiento se ha utilizado para el ajuste de los parámetros de los modelos, el de validación para monitorizar el rendimiento de los modelos durante el entrenamiento y comprobar su capacidad de generalización y el de test para la evaluación final del rendimiento.
+Como ya hemos visto el problema se ha abordado como una tarea de clasificación binaria, donde cada noticia se etiqueta como true o false. Esta simplificación nos ha permitido centrar el análisis en la capacidad de los modelos para distinguir información veraz de información falsa, evitando la degradación de prestaciones observada en experimentos preliminares con clasificación multiclase (true, false o partially false).
+Para la evaluación se han utilizado distintos indicadores en función del tipo de modelo evaluado. Para los modelos clásicos de Regresión Logística y Support Vector Machine (SVM) se ha empleado principalmente la accuracy, ya que, tras la limpieza y balanceo del dataset, esta métrica resulta representativa del rendimiento global del clasificador. No obstante, para los modelos más complejos, como la red neuronal y el modelo RoBERTa con fine-tuning, se han considerado métricas adicionales como la matriz de confusión, el recall y el F1-score, con especial atención a la capacidad del modelo para detectar correctamente noticias falsas.
+
+***4.2. Análisis y resultados de las técnicas de vectorización***
+Antes de evaluar el rendimiento de los distintos modelos de clasificación, se ha realizado un análisis de las representaciones numéricas generadas por cada una de las técnicas de vectorización empleadas. Estas representaciones constituyen la entrada de los clasificadores y, por tanto, condicionan de forma directa su capacidad para extraer patrones relevantes del texto. 
+
+***4.2.1. TF-IDF***
+En una primera aproximación se ha utilizado la representación TF-IDF partiendo de un modelo Bag of Words. Inicialmente, el vocabulario generado alcanza un tamaño cercano a 37 000 palabras, dando lugar a una matriz de documentos de dimensiones (3119, 37385), lo que resulta poco manejable para los modelos de clasificación.
+Para reducir la dimensionalidad, se ha empleado la implementación de scikit-learn, aplicando filtros sobre el vocabulario mediante los parámetros min_df y max_df. En concreto, se han eliminado las palabras que aparecen en menos de 10 documentos y aquellas que aparecen en más del 60% de las noticias. Tras este filtrado, el vocabulario se reduce a 7158 términos, obteniéndose una matriz final de tamaño (3119, 7158), sin pérdida apreciable de información relevante para la clasificación.
+
+***4.2.2. Word2Vec***
+Como segunda técnica se ha utilizado Word2Vec, que genera embeddings semánticos densos para cada palabra. Tras el entrenamiento del modelo, se obtiene un vocabulario de 8472 palabras, cada una representada mediante un vector de 100 dimensiones.
+La representación de cada noticia se ha calculado como el promedio de los embeddings de las palabras que la componen, dando lugar a una matriz final de documentos de dimensiones (3119, 100). Esta reducción de dimensionalidad disminuye el coste computacional, aunque puede implicar una pérdida de información respecto a técnicas basadas en frecuencia como TF-IDF.
+
+***4.2.3. Embeddings contextuales (BERT, DistilBERT y RoBERTa)***
+Finalmente, se han evaluado embeddings contextuales basados en modelos preentrenados de lenguaje: DistilBERT, BERT y RoBERTa. Para una primera comparativa, se ha utilizado un subconjunto del dataset, obteniendo embeddings de 768 dimensiones y evaluando la accuracy en validación.
+Los resultados muestran que RoBERTa ofrece el mejor rendimiento entre los modelos evaluados, por lo que se ha seleccionado como modelo de referencia. Aplicado sobre el conjunto completo de noticias, se obtiene una matriz final de documentos de dimensiones (3119, 768), utilizada en los experimentos posteriores.
+
+***4.3. Resultados con Regresión Logística***
+En este apartado se presentan los resultados obtenidos al aplicar Regresión Logística sobre las distintas representaciones vectoriales analizadas previamente: TF-IDF, Word2Vec y embeddings contextuales basados en RoBERTa. Para cada caso se evalúa el rendimiento sobre los conjuntos de entrenamiento, validación y test mediante la métrica de accuracy.Los resultados obtenidos quedan resumidos en la siguiente tabla:
+
 
 
 
 ## **5.-Conclusiones**
+
 
 
 
